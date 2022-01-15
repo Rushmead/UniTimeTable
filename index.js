@@ -17,7 +17,7 @@ let courses = [];
 if(!fs.existsSync(path.join(__dirname, DATA_DIR, 'courses.json'))){
     fs.writeFileSync(path.join(__dirname, DATA_DIR, 'courses.json'), JSON.stringify(courses));
 } else {
-    courses = JSON.parse(fs.readFileSync('courses.json'));
+    courses = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'courses.json')));
 }
 if(!fs.existsSync(path.join(__dirname, DATA_DIR, 'courses'))){
     fs.mkdirSync(path.join(__dirname, DATA_DIR, 'courses'));
