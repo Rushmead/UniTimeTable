@@ -12,6 +12,8 @@ const OTP = process.env.USW_OTP || 'nop';
 const WEEK_ONE_START = process.env.USW_WEEK_ONE || '5 Jul 2021';
 const DATA_DIR = process.env.DATA_DIR || "data";
 
+const WAIT_DURATION = 10000;
+
 var until = selenium.until;
 let weekOneStart = WEEK_ONE_START;
 let weekDates = [];
@@ -29,31 +31,31 @@ async function run(courses) {
         console.log("Logging in");
         selector = selenium.By.name("Select");
         condition = selenium.until.elementLocated(selector);
-        button = await driver.wait(condition, 5000);
+        button = await driver.wait(condition, WAIT_DURATION);
         await button.click();
 await driver.wait(until.elementLocated(selenium.By.id("i0116")));
    console.log((await driver.getCurrentUrl())); 
         selector = selenium.By.id("i0116");
         condition = selenium.until.elementLocated(selector);
-        var text = await driver.wait(condition, 5000);
+        var text = await driver.wait(condition, WAIT_DURATION);
         await text.sendKeys(USERNAME);
     
         //idSIButton9
         selector = selenium.By.id("idSIButton9");
         condition = selenium.until.elementLocated(selector);
-        button = await driver.wait(condition, 5000);
+        button = await driver.wait(condition, WAIT_DURATION);
         await button.click();
 
         selector = selenium.By.id("i0118");
         condition = selenium.until.elementLocated(selector);
-        text = await driver.wait(condition, 5000);
+        text = await driver.wait(condition, WAIT_DURATION);
         await text.sendKeys(PASSWORD);
 
         await new Promise(resolve => setTimeout(resolve, 1000));
 
         selector = selenium.By.id("idSIButton9");
         condition = selenium.until.elementLocated(selector);
-        button = await driver.wait(condition, 5000);
+        button = await driver.wait(condition, WAIT_DURATION);
         await button.click();
 
         //idTxtBx_SAOTCC_OTC
@@ -61,18 +63,18 @@ await driver.wait(until.elementLocated(selenium.By.id("i0116")));
         var token = totp(OTP);
         selector = selenium.By.id("idTxtBx_SAOTCC_OTC");
         condition = selenium.until.elementLocated(selector);
-        text = await driver.wait(condition, 5000);
+        text = await driver.wait(condition, WAIT_DURATION);
         await text.sendKeys(token);
     
         selector = selenium.By.id("idSubmit_SAOTCC_Continue");
         condition = selenium.until.elementLocated(selector);
-        button = await driver.wait(condition, 5000);
+        button = await driver.wait(condition, WAIT_DURATION);
         await button.click();
 
     console.log("Clicking Course Timetable");
     selector = selenium.By.linkText("Course Timetable (Student Group)");
     condition = selenium.until.elementLocated(selector);
-    button = await driver.wait(condition, 5000);
+    button = await driver.wait(condition, WAIT_DURATION);
     await button.click();
 
     if(courses.indexOf("Accounting and Finance (SWE Returners) - BA - Year 3  - Group 01") === -1){
@@ -80,7 +82,7 @@ await driver.wait(until.elementLocated(selenium.By.id("i0116")));
         console.log((await driver.getCurrentUrl()));
         selector = selenium.By.name("lbxStudentSets");
         condition = selenium.until.elementLocated(selector);
-        select = await driver.wait(condition, 5000);
+        select = await driver.wait(condition, WAIT_DURATION);
         options = await select.findElements(selenium.By.tagName("option"))
         var selectedCourses = 0;
         for(var i = 0; i < options.length; i++){
@@ -100,7 +102,7 @@ await driver.wait(until.elementLocated(selenium.By.id("i0116")));
     } else {
         selector = selenium.By.name("lbxStudentSets");
         condition = selenium.until.elementLocated(selector);
-        select = await driver.wait(condition, 5000);
+        select = await driver.wait(condition, WAIT_DURATION);
         options = await select.findElements(selenium.By.tagName("option"))
         var selectedCourses = 0;
         for(var i = 0; i < options.length; i++){
@@ -125,7 +127,7 @@ await driver.wait(until.elementLocated(selenium.By.id("i0116")));
     console.log("Selecting weeks")
     let weeksSelector = selenium.By.name("lbxWeeks");
     let weeksCondition = selenium.until.elementLocated(weeksSelector);
-    let weeksSelect = await driver.wait(weeksCondition, 5000);
+    let weeksSelect = await driver.wait(weeksCondition, WAIT_DURATION);
     let weekOptions = await  weeksSelect.findElements(selenium.By.tagName("option"))
     for(var i = 0; i < weekOptions.length; i++){
          var option = weekOptions[i]
@@ -137,7 +139,7 @@ await driver.wait(until.elementLocated(selenium.By.id("i0116")));
     console.log("Clicking show timetable");
     selector = selenium.By.name("btnShowTimetable");
     condition = selenium.until.elementLocated(selector);
-    button = await driver.wait(condition, 5000);
+    button = await driver.wait(condition, WAIT_DURATION);
     await button.click();
 
     let handles = await driver.getAllWindowHandles();
