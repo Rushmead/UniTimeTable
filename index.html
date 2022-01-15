@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>USW Timetable for Calendars</title>
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="w-100 h-100 flex flex-row justify-center">
+    <div class="w-1/2 flex flex-col">
+        <div class="flex flex-row justify-center text-center">
+            <div class="flex flex-col text-center">
+                <h1 class="text-4xl">USW Timetables for Calendars</h1>
+                <p class="font-bold underline">This website is unofficial</p>
+                <p class="text-lg text-red-600 font-bold underline">Note: for Android follow instructions on how to add at the bottom of this page.</p>
+            </div>
+        </div>
+        <div class="flex flex-row mt-2 justify-center">
+            <div class="flex flex-col text-center">
+                <h2 class="text-xl underline font-bold">Timetables</h2>
+                <p class="text-md font-bold">These timetables are automatically refreshed every Saturday / Friday at midnight.</p>
+                <div class="flex flex-row justify-center items-center mt-2">
+                    <div class="flex flex-col">
+                        <select id="courselist" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-r-none rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                            <option value="">Select a Course</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col">
+                        <a id="url" href="#" class="p-2 bg-green-600 text-white rounded rounded-l-none hover:bg-green-700 focus:outline-none">Add</a>
+                    </div>
+                </div>
+                <small class="mt-2">Calendar Link for Android / Manual</small>
+                <div class="flex flex-row justify-center">
+                    <div class="flex flex-col w-1/2">
+                        <input type="text" id="linkbox" class="mt-2 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                    </div>
+                </div>
+                <small>Click box to copy</small>
+                <p class="mt-2">Can't see your course? Message me on messenger: <a href="https://m.me/stuart.pomeroy.98"  target="_blank" class="text-blue-600 hover:underline">m.me/stuart.pomeroy.98</a></p>
+                <h2 class="text-xl underline font-bold mt-4">How to use on Android</h2>
+                <p>
+                    In order to use these on Android you must add them to a Google account. To do this go to <a href="https://calendar.google.com" target="_blank" class="text-blue-600 hover:underline">https://calendar.google.com</a> and click the plus icon next to "Other calendars". Select "From URL" from the dropdown. Now select the course above, then right click on the "Add" button and choose "Copy Link Location", paste the link into the box on the google calendar website and press "Add calendar". You'll then need to make sure that your google account is linked to your phone. 
+                </p>
+            </div>
+        </div>
+        <div class="flex flex-row">
+        </div>
+    </div>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript">
+function initials(text){
+	var parts = text.split("-");
+  var courseName = parts[0];
+  var year = parts[parts.length > 2 ? 2 : 1].match(/\d+/);
+  var group;
+  if(parts.length > 3){
+  	group = parts[3].match(/\d+/);
+  }
+  var initials = courseName.replace(/[^A-Z- ]/g, "").match(/\b\w/g);
+ 	
+  return initials.join('') + "-Y" + year + (group !== undefined ? "-G" + group : "");
+};        
+let labelToValueMap = {};
+$(document).ready(() => {
+            $('#linkbox').val("");
+            $.get('/courses').then((data) => {
+                let courses = JSON.parse(data);
+                courses.forEach((course) => {
+            let label = initials(course);
+                    labelToValueMap[label] = course;
+                    $('#courselist').append("<option value='" + course + "' label='" + label + "'>" + label + "</option>")
+                });
+            })
+            $('#courselist').change(function(){
+                $('#url').attr('href', encodeURI("webcal://uswtime.date/calendar/" + $(this).val()));
+                $('#linkbox').val(encodeURI("webcal://uswtime.date/calendar/" + $(this).val()));
+            });
+            $('#linkbox').change(function(event){
+                event.preventDefault();
+                $('#linkbox').val($('#linkbox').val());
+            })
+            $('#linkbox').click(function(){
+                var copyText = document.getElementById("linkbox");
+                copyText.select();
+                copyText.setSelectionRange(0, 99999);
+                document.execCommand("copy");
+            });
+        });
+    </script>
+</body>
+</html>
