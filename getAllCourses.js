@@ -22,10 +22,11 @@ for(var i = 0; i < 52; i++){
 }
 
 var firefox = require('selenium-webdriver/firefox');
-var capabilities = selenium.Capabilities.firefox();
+var chrome = require('selenium-webdriver/chrome');
+var capabilities = selenium.Capabilities.chrome();
 
 async function run(courses) {
-    var driver = new selenium.Builder().withCapabilities(capabilities).setFirefoxOptions(new firefox.Options().headless()).build();
+    var driver = new selenium.Builder().withCapabilities(capabilities).setFirefoxOptions(new chrome.Options().headless()).build();
     // var driver = new selenium.Builder().withCapabilities(capabilities).setFirefoxOptions(new firefox.Options()).build();
     await driver.get(TIMETABLE);
         console.log("Logging in");
