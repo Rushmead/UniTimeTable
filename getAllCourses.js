@@ -26,7 +26,15 @@ var chrome = require('selenium-webdriver/chrome');
 var capabilities = selenium.Capabilities.chrome();
 
 async function run(courses) {
-    var driver = new selenium.Builder().withCapabilities(capabilities).setChromeOptions(new chrome.Options().headless().addArguments('disable-gpu')).build();
+    var options = new chrome.Options();
+    options.addArguments("start-maximized"); // open Browser in maximized mode
+    options.addArguments("disable-infobars"); // disabling infobars
+    options.addArguments("--disable-extensions"); // disabling extensions
+    options.addArguments("--disable-gpu"); // applicable to windows os only
+    options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
+    options.addArguments("--no-sandbox");
+    options.headless();
+    var driver = new selenium.Builder().withCapabilities(capabilities).setChromeOptions(options).build();
     // var driver = new selenium.Builder().withCapabilities(capabilities).setFirefoxOptions(new firefox.Options()).build();
     await driver.get(TIMETABLE);
         console.log("Logging in");
