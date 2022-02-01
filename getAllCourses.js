@@ -40,11 +40,19 @@ chromeCapabilities.set('goog:chromeOptions', {
     "--hide-scrollbars",
     "--metrics-recording-only",
     "--mute-audio",
-    "--headless",
     "--no-sandbox"
   ]
 });
   
+
+async function takeScreenshot(driver, step){
+await driver.takeScreenshot().then(function(data){
+    var base64Data = data.replace(/^data:image\/png;base64,/,"")
+    fs.writeFile(step + ".png", base64Data, 'base64', function(err) {
+         if(err) console.log(err);
+    });
+ });
+}
 async function run(courses) {
 
     var driver = new selenium.Builder()
@@ -54,48 +62,68 @@ async function run(courses) {
     .build();
     // var driver = new selenium.Builder().withCapabilities(capabilities).setFirefoxOptions(new firefox.Options()).build();
     await driver.get(TIMETABLE);
+        console.log(await driver.getCurrentUrl());
         console.log("Logging in");
         selector = selenium.By.name("Select");
         condition = selenium.until.elementLocated(selector);
         button = await driver.wait(condition, WAIT_DURATION);
         await button.click();
-await driver.wait(until.elementLocated(selenium.By.id("i0116")));
-   console.log((await driver.getCurrentUrl())); 
+        console.log("Waiting for navigation away");
+
+        await driver.wait(until.elementLocated(selenium.By.id("i0116")));
+        console.log("Navigated to O365"); 
         selector = selenium.By.id("i0116");
         condition = selenium.until.elementLocated(selector);
+        console.log("Waiting for username box"); 
         var text = await driver.wait(condition, WAIT_DURATION);
         await text.sendKeys(USERNAME);
-    
+        console.log("Sent Username"); 
+        takeScreenshot(driver, "username");
         //idSIButton9
         selector = selenium.By.id("idSIButton9");
         condition = selenium.until.elementLocated(selector);
+        console.log("Waiting for username button"); 
         button = await driver.wait(condition, WAIT_DURATION);
         await button.click();
 
         selector = selenium.By.id("i0118");
         condition = selenium.until.elementLocated(selector);
+        console.log("Waiting for password box"); 
         text = await driver.wait(condition, WAIT_DURATION);
         await text.sendKeys(PASSWORD);
+        console.log("Sent password"); 
+        takeScreenshot(driver, "password");
 
         await new Promise(resolve => setTimeout(resolve, 1000));
 
         selector = selenium.By.id("idSIButton9");
         condition = selenium.until.elementLocated(selector);
+        console.log("Waiting for next button"); 
         button = await driver.wait(condition, WAIT_DURATION);
         await button.click();
+        takeScreenshot(driver, "password-click");
 
+        await new Promise(resolve => setTimeout(resolve, 10000));
+        
         //idTxtBx_SAOTCC_OTC
-        console.log((await driver.getCurrentUrl()))
-        var token = totp(OTP);
+        takeScreenshot(driver, "totp-start");
+        console.log("Doing ToTP"); 
+        
         selector = selenium.By.id("idTxtBx_SAOTCC_OTC");
         condition = selenium.until.elementLocated(selector);
+        console.log("waiting for totp box"); 
+        takeScreenshot(driver, "totp-mid");
         text = await driver.wait(condition, WAIT_DURATION);
+        var token = totp(OTP);
         await text.sendKeys(token);
+        console.log("sent totp key"); 
     
         selector = selenium.By.id("idSubmit_SAOTCC_Continue");
         condition = selenium.until.elementLocated(selector);
+        console.log("waiting for next button");
         button = await driver.wait(condition, WAIT_DURATION);
         await button.click();
+        console.log("Clicked next button"); 
 
     console.log("Clicking Course Timetable");
     selector = selenium.By.linkText("Course Timetable (Student Group)");
