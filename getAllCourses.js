@@ -89,6 +89,7 @@ async function run(courses) {
         selector = selenium.By.id("i0118");
         condition = selenium.until.elementLocated(selector);
         console.log("Waiting for password box"); 
+        takeScreenshot(driver, "pre-password");
         text = await driver.wait(condition, WAIT_DURATION);
         await text.sendKeys(PASSWORD);
         console.log("Sent password"); 
@@ -108,7 +109,7 @@ async function run(courses) {
         //idTxtBx_SAOTCC_OTC
         takeScreenshot(driver, "totp-start");
         console.log("Doing ToTP"); 
-        
+
         selector = selenium.By.id("idTxtBx_SAOTCC_OTC");
         condition = selenium.until.elementLocated(selector);
         console.log("waiting for totp box"); 
