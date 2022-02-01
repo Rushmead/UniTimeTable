@@ -10,14 +10,13 @@ WORKDIR /usr/app
 COPY package*.json ./
 RUN npm install --production
 
-RUN apt install wget -y
-RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.30.0/geckodriver-v0.30.0-linux64.tar.gz 
-RUN tar -xvzf geckodriver-v0.30.0-linux64.tar.gz 
-RUN chmod +x geckodriver 
-RUN mv geckodriver /usr/local/bin/
+RUN apt install wget unzip -y
+RUN wget https://chromedriver.storage.googleapis.com/97.0.4692.71/chromedriver_linux64.zip
+RUN unzip chromedriver_linux64.zip
+RUN chmod +x chromedriver 
+RUN mv chromedriver /usr/local/bin/
 
-RUN apt install firefox -y
-RUN export MOZ_HEADLESS=1
+RUN apt install chromium-browser -y
 
 COPY . .
 
