@@ -21,14 +21,13 @@ for(var i = 0; i < 52; i++){
     weekDates[i + 1] = moment(weekOneStart, "D MMM YYYY").add(i, 'week');
 }
 
-var firefox = require('selenium-webdriver/firefox');
-var chrome = require('selenium-webdriver/chrome');
 const chromeCapabilities = selenium.Capabilities.chrome();
-    chromeCapabilities.set(
+chromeCapabilities.set(
     'chromeOptions', {
         args: [
         '--headless',
         '--no-sandbox',
+        '--disable-setuid-sandbox'
         ],
     }
 );
