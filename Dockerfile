@@ -10,16 +10,6 @@ WORKDIR /usr/app
 COPY package*.json ./
 RUN npm install --production
 
-RUN apt install wget unzip -y
-RUN wget https://chromedriver.storage.googleapis.com/97.0.4692.71/chromedriver_linux64.zip
-RUN unzip chromedriver_linux64.zip
-RUN chmod +x chromedriver 
-RUN mv chromedriver /usr/local/bin/
-
-RUN apt install default-jre -y
-RUN apt -f install -y
-RUN apt install chromium-browser -y
-
 COPY . .
 
 EXPOSE 3000
