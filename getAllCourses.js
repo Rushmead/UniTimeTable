@@ -23,18 +23,23 @@ for(var i = 0; i < 52; i++){
 
 var firefox = require('selenium-webdriver/firefox');
 var chrome = require('selenium-webdriver/chrome');
-var capabilities = selenium.Capabilities.chrome();
+const chromeCapabilities = selenium.Capabilities.chrome();
+    chromeCapabilities.set(
+    'chromeOptions', {
+        args: [
+        '--headless',
+        '--no-sandbox',
+        ],
+    }
+);
 
 async function run(courses) {
-    var options = new chrome.Options();
-    options.addArguments("start-maximized"); // open Browser in maximized mode
-    options.addArguments("disable-infobars"); // disabling infobars
-    options.addArguments("--disable-extensions"); // disabling extensions
-    options.addArguments("--disable-gpu"); // applicable to windows os only
-    options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
-    options.addArguments("--no-sandbox");
-    options.headless();
-    var driver = new selenium.Builder().withCapabilities(capabilities).setChromeOptions(options).build();
+
+    var driver = new selenium.Builder()
+    .forBrowser('chrome')
+    .withCapabilities(chromeCapabilities)
+    .usingServer('http://browser:3000/webdriver') // <-- Apply usingServer and that's it
+    .build();
     // var driver = new selenium.Builder().withCapabilities(capabilities).setFirefoxOptions(new firefox.Options()).build();
     await driver.get(TIMETABLE);
         console.log("Logging in");
