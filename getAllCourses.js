@@ -12,7 +12,7 @@ const OTP = process.env.USW_OTP || 'nop';
 const WEEK_ONE_START = process.env.USW_WEEK_ONE || '5 Jul 2021';
 const DATA_DIR = process.env.DATA_DIR || "data";
 
-const WAIT_DURATION = 10000;
+const WAIT_DURATION = 20000;
 
 var until = selenium.until;
 let weekOneStart = WEEK_ONE_START;
