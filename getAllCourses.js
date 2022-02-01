@@ -22,16 +22,27 @@ for(var i = 0; i < 52; i++){
 }
 
 const chromeCapabilities = selenium.Capabilities.chrome();
-chromeCapabilities.set(
-    'chromeOptions', {
-        args: [
-        '--headless',
-        '--no-sandbox',
-        '--disable-setuid-sandbox'
-        ],
-    }
-);
-
+chromeCapabilities.set('goog:chromeOptions', {
+    args: [
+      "--disable-background-timer-throttling",
+      "--disable-backgrounding-occluded-windows",
+      "--disable-breakpad",
+      "--disable-component-extensions-with-background-pages",
+      "--disable-dev-shm-usage",
+      "--disable-extensions",
+      "--disable-features=TranslateUI,BlinkGenPropertyTrees",
+      "--disable-ipc-flooding-protection",
+      "--disable-renderer-backgrounding",
+      "--enable-features=NetworkService,NetworkServiceInProcess",
+      "--force-color-profile=srgb",
+      "--hide-scrollbars",
+      "--metrics-recording-only",
+      "--mute-audio",
+      "--headless",
+      "--no-sandbox"
+    ]
+  });
+  
 async function run(courses) {
 
     var driver = new selenium.Builder()
