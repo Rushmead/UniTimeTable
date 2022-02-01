@@ -11,6 +11,7 @@ const PASSWORD = process.env.USW_PASSWORD || 'nop';
 const OTP = process.env.USW_OTP || 'nop';
 const WEEK_ONE_START = process.env.USW_WEEK_ONE || '5 Jul 2021';
 const DATA_DIR = process.env.DATA_DIR || "data";
+const BROWSERLESS_TOKEN = process.env.BROWSERLESS_TOKEN || "nop";
 
 const WAIT_DURATION = 20000;
 
@@ -22,33 +23,34 @@ for(var i = 0; i < 52; i++){
 }
 
 const chromeCapabilities = selenium.Capabilities.chrome();
+chromeCapabilities.set('browserless:token', BROWSERLESS_TOKEN);
 chromeCapabilities.set('goog:chromeOptions', {
-    args: [
-      "--disable-background-timer-throttling",
-      "--disable-backgrounding-occluded-windows",
-      "--disable-breakpad",
-      "--disable-component-extensions-with-background-pages",
-      "--disable-dev-shm-usage",
-      "--disable-extensions",
-      "--disable-features=TranslateUI,BlinkGenPropertyTrees",
-      "--disable-ipc-flooding-protection",
-      "--disable-renderer-backgrounding",
-      "--enable-features=NetworkService,NetworkServiceInProcess",
-      "--force-color-profile=srgb",
-      "--hide-scrollbars",
-      "--metrics-recording-only",
-      "--mute-audio",
-      "--headless",
-      "--no-sandbox"
-    ]
-  });
+  args: [
+    "--disable-background-timer-throttling",
+    "--disable-backgrounding-occluded-windows",
+    "--disable-breakpad",
+    "--disable-component-extensions-with-background-pages",
+    "--disable-dev-shm-usage",
+    "--disable-extensions",
+    "--disable-features=TranslateUI,BlinkGenPropertyTrees",
+    "--disable-ipc-flooding-protection",
+    "--disable-renderer-backgrounding",
+    "--enable-features=NetworkService,NetworkServiceInProcess",
+    "--force-color-profile=srgb",
+    "--hide-scrollbars",
+    "--metrics-recording-only",
+    "--mute-audio",
+    "--headless",
+    "--no-sandbox"
+  ]
+});
   
 async function run(courses) {
 
     var driver = new selenium.Builder()
     .forBrowser('chrome')
     .withCapabilities(chromeCapabilities)
-    .usingServer('http://browser:3000/webdriver') // <-- Apply usingServer and that's it
+    .usingServer('https://chrome.browserless.io/webdriver')
     .build();
     // var driver = new selenium.Builder().withCapabilities(capabilities).setFirefoxOptions(new firefox.Options()).build();
     await driver.get(TIMETABLE);
