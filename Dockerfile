@@ -16,6 +16,8 @@ RUN unzip chromedriver_linux64.zip
 RUN chmod +x chromedriver 
 RUN mv chromedriver /usr/local/bin/
 
+RUN apt install default-jre -y
+RUN apt -f install -y
 RUN apt install chromium-browser -y
 
 COPY . .
